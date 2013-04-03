@@ -138,7 +138,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>lmidk-agdi</Key>
-          <Name>-U-O4622 -O4622 -S3 -FO29</Name>
+          <Name>-O4622 -S3 -FO29</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
       <Breakpoint>
@@ -146,7 +146,7 @@
           <Number>0</Number>
           <Type>0</Type>
           <LineNumber>61</LineNumber>
-          <EnabledFlag>0</EnabledFlag>
+          <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
@@ -154,7 +154,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
-          <Filename>C:\Users\Kevin\Documents\GitHub\EE319K\Lab 7\Lab7.c</Filename>
+          <Filename>C:\Users\Kevin\Documents\GitHub\EE319K\Lab 7\Sound.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -163,26 +163,9 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>count</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>songlen</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
           <ItemText>songptr</ItemText>
         </Ww>
       </WatchWindow1>
-      <MemoryWindow1>
-        <Mm>
-          <WinNumber>1</WinNumber>
-          <SubType>0</SubType>
-          <ItemText>0xE000E014</ItemText>
-        </Mm>
-      </MemoryWindow1>
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
@@ -218,7 +201,7 @@
         <Wi>
           <IntNumber>0</IntNumber>
           <FirstString>`PORTF</FirstString>
-          <SecondString>FF00000000000000000000000000000000E06F4000000000000000000000000000000000504F5254460000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000000F03F0000000000000000000000000000000000000000FC010000</SecondString>
+          <SecondString>FF00000000000000000000000000000000E06F4000000000000000000000000000000000504F5254460000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000000F03F000000000000000000000000000000000000000030020000</SecondString>
         </Wi>
       </LogicAnalyzers>
     </TargetOption>
@@ -238,8 +221,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>401</TopLine>
-      <CurrentLine>407</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Startup.s</PathWithFileName>
       <FilenameWithoutPath>Startup.s</FilenameWithoutPath>
@@ -252,10 +235,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>47</ColumnNumber>
+      <ColumnNumber>7</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>33</TopLine>
-      <CurrentLine>47</CurrentLine>
+      <TopLine>44</TopLine>
+      <CurrentLine>65</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\SysTickInts.c</PathWithFileName>
       <FilenameWithoutPath>SysTickInts.c</FilenameWithoutPath>
@@ -268,13 +251,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>21</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>43</TopLine>
-      <CurrentLine>64</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Lab7.c</PathWithFileName>
-      <FilenameWithoutPath>Lab7.c</FilenameWithoutPath>
+      <PathWithFileName>.\dac.c</PathWithFileName>
+      <FilenameWithoutPath>dac.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -284,13 +267,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>22</CurrentLine>
+      <TopLine>5</TopLine>
+      <CurrentLine>61</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\dac.c</PathWithFileName>
-      <FilenameWithoutPath>dac.c</FilenameWithoutPath>
+      <PathWithFileName>.\Lab7.c</PathWithFileName>
+      <FilenameWithoutPath>Lab7.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -302,8 +285,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>15</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Piano.c</PathWithFileName>
       <FilenameWithoutPath>Piano.c</FilenameWithoutPath>
@@ -316,10 +299,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>25</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>42</TopLine>
-      <CurrentLine>48</CurrentLine>
+      <TopLine>35</TopLine>
+      <CurrentLine>59</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Sound.c</PathWithFileName>
       <FilenameWithoutPath>Sound.c</FilenameWithoutPath>
@@ -330,7 +313,7 @@
 
   <Group>
     <GroupName>Library</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

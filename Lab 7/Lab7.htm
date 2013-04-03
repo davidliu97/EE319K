@@ -3,7 +3,7 @@
 <title>Static Call Graph - [C:\Users\Kevin\Documents\GitHub\EE319K\Lab 7\Lab7.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image C:\Users\Kevin\Documents\GitHub\EE319K\Lab 7\Lab7.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Wed Apr 03 15:31:09 2013
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Wed Apr 03 16:10:41 2013
 <BR><P>
 <H3>Maximum Stack Usage =         48 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -13,10 +13,10 @@ main &rArr; Sound_PlaySong &rArr; waitsecs
 Functions with no stack information
 </H3><UL>
  <LI><a href="#[3b]">Reset_Handler</a>
- <LI><a href="#[52]">DisableInterrupts</a>
+ <LI><a href="#[51]">DisableInterrupts</a>
  <LI><a href="#[42]">EnableInterrupts</a>
- <LI><a href="#[53]">StartCritical</a>
- <LI><a href="#[54]">EndCritical</a>
+ <LI><a href="#[52]">StartCritical</a>
+ <LI><a href="#[53]">EndCritical</a>
  <LI><a href="#[46]">WaitForInterrupt</a>
 </UL>
 </UL>
@@ -314,19 +314,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
 
-<P><STRONG><a name="[4f]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[4e]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[3d]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[4e]"></a>__main_after_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
+<P><STRONG><a name="[4d]"></a>__main_after_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Called By]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[50]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[4f]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[51]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8.o(.ARM.Collect$$$$00000009))
+<P><STRONG><a name="[50]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8.o(.ARM.Collect$$$$00000009))
 
 <P><STRONG><a name="[48]"></a>wait1ms</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, sound.o(.emb_text))
 <BR><BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;waitsecs
@@ -339,15 +339,15 @@ Global Symbols
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysCtlClockSet
 </UL>
 
-<P><STRONG><a name="[52]"></a>DisableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[51]"></a>DisableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
 <P><STRONG><a name="[42]"></a>EnableInterrupts</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[53]"></a>StartCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[52]"></a>StartCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
-<P><STRONG><a name="[54]"></a>EndCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
+<P><STRONG><a name="[53]"></a>EndCritical</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text), UNUSED)
 
 <P><STRONG><a name="[46]"></a>WaitForInterrupt</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -360,6 +360,14 @@ Global Symbols
 
 <P><STRONG><a name="[4b]"></a>SysTick_SetReload</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, systickints.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[4a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sound_Play
+</UL>
+
+<P><STRONG><a name="[49]"></a>DAC_Init</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, dac.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sound_Init
+</UL>
+
+<P><STRONG><a name="[4c]"></a>DAC_Out</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, dac.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
 <P><STRONG><a name="[3a]"></a>main</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, lab7.o(.text))
@@ -376,15 +384,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry8.o(.ARM.Collect$$$$00000009)
 </UL>
-<P><STRONG><a name="[49]"></a>DAC_Init</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, dac.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sound_Init
-</UL>
-
-<P><STRONG><a name="[4d]"></a>DAC_Out</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, dac.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advance_note
-</UL>
-
-<P><STRONG><a name="[55]"></a>Piano_In</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, piano.o(.text), UNUSED)
+<P><STRONG><a name="[54]"></a>Piano_In</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, piano.o(.text), UNUSED)
 
 <P><STRONG><a name="[43]"></a>Piano_Init</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, piano.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -407,7 +407,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4a]"></a>Sound_Play</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, sound.o(.text))
+<P><STRONG><a name="[4a]"></a>Sound_Play</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, sound.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = Sound_Play
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_SetReload
@@ -424,28 +424,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[4c]"></a>advance_note</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, sound.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = advance_note
+<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, sound.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SysTick_Handler
 </UL>
-<BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAC_Out
-</UL>
-<BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-</UL>
-
-<P><STRONG><a name="[9]"></a>SysTick_Handler</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, sound.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = SysTick_Handler &rArr; advance_note
-</UL>
-<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advance_note
+<BR>[Calls]<UL><LI><a href="#[4c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DAC_Out
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
 <P><STRONG><a name="[3e]"></a>__scatterload</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, init.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main_after_scatterload
+<BR><BR>[Calls]<UL><LI><a href="#[4d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main_after_scatterload
 </UL>
 <BR>[Called By]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[56]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[55]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[40]"></a>SysCtlClockSet</STRONG> (Thumb, 288 bytes, Stack size 24 bytes, sysctl.o(i.SysCtlClockSet))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SysCtlClockSet
@@ -455,11 +447,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[57]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[56]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[58]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[57]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[59]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[58]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 <P>
 <H3>
 Local Symbols
