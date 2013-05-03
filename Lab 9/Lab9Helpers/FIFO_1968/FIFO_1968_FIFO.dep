@@ -1,0 +1,6 @@
+Dependencies for Project 'FIFO_1968', Target 'FIFO': (DO NOT MODIFY !)
+F (.\Startup.s)(0x4E5AD478)(--cpu Cortex-M3 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\FIFOTestMain.c)(0x4FF379EC)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "fifotestmain.o" --omf_browse "fifotestmain.crf" --depend "fifotestmain.d")
+F (.\FIFO.c)(0x4E5CE382)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "fifo.o" --omf_browse "fifo.crf" --depend "fifo.d")
+I (FIFO.h)(0x4E5CE382)
+F (..\driverlib\rvmdk\driverlib.lib)(0x00000000)()

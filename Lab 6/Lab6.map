@@ -48,8 +48,8 @@ Image Symbol Table
     TestEnd                                  0x0000025c   Data           4  lab6.o(.text)
     .text                                    0x00000278   Section      684  lcd.o(.text)
     OutFixedOFString                         0x00000278   Data           0  lcd.o(.text)
-    .text                                    0x00000524   Section      136  io.o(.text)
-    .text                                    0x000005ac   Section       80  pll.o(.text)
+    .text                                    0x00000524   Section      132  io.o(.text)
+    .text                                    0x000005a8   Section       80  pll.o(.text)
     STACK                                    0x20000000   Section      256  startup.o(STACK)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
 
@@ -71,8 +71,8 @@ Image Symbol Table
     LCD_OutFix                               0x0000043f   Thumb Code     0  lcd.o(.text)
     IO_Init                                  0x00000525   Thumb Code     0  io.o(.text)
     IO_Touch                                 0x0000055b   Thumb Code     0  io.o(.text)
-    IO_HeartBeat                             0x0000057b   Thumb Code     0  io.o(.text)
-    PLL_Init                                 0x000005ad   Thumb Code     0  pll.o(.text)
+    IO_HeartBeat                             0x00000579   Thumb Code     0  io.o(.text)
+    PLL_Init                                 0x000005a9   Thumb Code     0  pll.o(.text)
     __initial_sp                             0x20000100   Data           0  startup.o(STACK)
 
 
@@ -83,17 +83,17 @@ Memory Map of the image
 
   Image Entry point : 0x00000101
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x000005fc, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x000005f8, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x000005fc, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x000005f8, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x0000010c   Code   RO            3  * RESET               startup.o
     0x0000010c   0x0000016c   Code   RO           10    .text               lab6.o
     0x00000278   0x000002ac   Code   RO           13    .text               lcd.o
-    0x00000524   0x00000088   Code   RO           16    .text               io.o
-    0x000005ac   0x00000050   Code   RO           19    .text               pll.o
+    0x00000524   0x00000084   Code   RO           16    .text               io.o
+    0x000005a8   0x00000050   Code   RO           19    .text               pll.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
@@ -115,14 +115,14 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       136         26          0          0          0        212   io.o
+       132         24          0          0          0        212   io.o
        364        240          0          0          0        204   lab6.o
        684         40          0          0          0        392   lcd.o
         80         10          0          0          0        188   pll.o
        268        258          0          0        256        212   startup.o
 
     ----------------------------------------------------------------------
-      1532        574          0          0        256       1208   Object Totals
+      1528        572          0          0        256       1208   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -137,15 +137,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1532        574          0          0        256       1208   Grand Totals
-      1532        574          0          0        256       1208   ELF Image Totals
-      1532        574          0          0          0          0   ROM Totals
+      1528        572          0          0        256       1208   Grand Totals
+      1528        572          0          0        256       1208   ELF Image Totals
+      1528        572          0          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 1532 (   1.50kB)
+    Total RO  Size (Code + RO Data)                 1528 (   1.49kB)
     Total RW  Size (RW Data + ZI Data)               256 (   0.25kB)
-    Total ROM Size (Code + RO Data + RW Data)       1532 (   1.50kB)
+    Total ROM Size (Code + RO Data + RW Data)       1528 (   1.49kB)
 
 ==============================================================================
 

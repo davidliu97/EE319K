@@ -1,0 +1,31 @@
+*** Creating Trace Output File 'Cosmonaut.tra' Ok.
+### Preparing for ADS-LD.
+### Creating ADS-LD Command Line
+### List of Objects: adding '"startup.o"'
+### List of Objects: adding '"actor.o"'
+### List of Objects: adding '"graphics.o"'
+### List of Objects: adding '"sound.o"'
+### List of Objects: adding '"systick.o"'
+### List of Objects: adding '"cosmonaut.o"'
+### List of Objects: adding '"utils.o"'
+### List of Objects: adding '"..\driverlib\rvmdk\driverlib.lib"'
+### List of Objects: adding '"draw.o"'
+### List of Objects: adding '"rit128x96x4.o"'
+### List of Objects: adding '"controller.o"'
+### List of Objects: adding '"dac.o"'
+### List of Objects: adding '"adc.o"'
+### ADS-LD Command completed:
+--cpu Cortex-M3 "startup.o" "actor.o" "graphics.o" "sound.o" "systick.o" "cosmonaut.o" "utils.o" C:\Users\Kevin\Documents\GitHub\EE319K\driverlib\rvmdk\driverlib.lib "draw.o" "rit128x96x4.o" "controller.o" "dac.o" "adc.o" 
+--ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\Cosmonaut.map" -o Cosmonaut.axf### Preparing Environment (PrepEnvAds)
+### ADS-LD Output File: 'Cosmonaut.axf'
+### ADS-LD Command File: 'Cosmonaut.lnp'
+### Checking for dirty Components...
+### Creating CmdFile 'Cosmonaut.lnp', Handle=0x000004FC
+### Writing '.lnp' file
+### ADS-LD Command file 'Cosmonaut.lnp' is ready.
+### ADS-LD: About to start ADS-LD Thread.
+### ADS-LD: executed with 0 errors
+### Updating obj list
+### LDADS_file() completed.

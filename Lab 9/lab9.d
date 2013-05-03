@@ -1,0 +1,10 @@
+lab9.o: Lab9.c
+lab9.o: ..\inc/hw_types.h
+lab9.o: ..\driverlib/sysctl.h
+lab9.o: UART1.h
+lab9.o: queue.h
+lab9.o: C:\Keil\ARM\Inc\Luminary\lm3s1968.h
+lab9.o: Output.h
+lab9.o: SysTick.h
+lab9.o: adc.h
+lab9.o: LCD.h

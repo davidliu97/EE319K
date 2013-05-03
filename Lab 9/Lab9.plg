@@ -1,0 +1,15 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\Kevin\Documents\GitHub\EE319K\Lab 9\Lab 9.uvproj
+Project File Date:  04/18/2013
+
+<h2>Output:</h2>
+Load "C:\\Users\\Kevin\\Documents\\GitHub\\EE319K\\Lab 9\\Lab9.AXF" 
+Warning: OSC to JTAG clock ratio violation - JTAG clock has been automatically adjusted to comply.
+Connecting: Mode=JTAG, Speed=600000Hz
+Erase Done.
+Programming Done.
+Verify OK.

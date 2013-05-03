@@ -1,0 +1,6 @@
+Dependencies for Project 'UART', Target 'UART': (DO NOT MODIFY !)
+F (.\Startup.s)(0x4BB255AA)(--cpu Cortex-M3 --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1" -I "C:\Keil\ARM\INC" -I "C:\Keil\ARM\INC\Luminary" -o "Startup.o" --depend "Startup.d")
+F (.\UART.c)(0x4E41DB05)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "C:\Keil\ARM\INC" -I "C:\Keil\ARM\INC\Luminary" -o "uart.o" --omf_browse "uart.crf" --depend "uart.d")
+I (UART.h)(0x4E41DB05)
+F (.\UARTTestMain.c)(0x4E2F452C)(-c --cpu Cortex-M3 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "C:\Keil\ARM\INC" -I "C:\Keil\ARM\INC\Luminary" -o "uarttestmain.o" --omf_browse "uarttestmain.crf" --depend "uarttestmain.d")
+F (..\driverlib\rvmdk\driverlib.lib)(0x4C6193FA)()

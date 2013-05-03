@@ -10,7 +10,7 @@ void DAC_Init()
 {
 	int count;
 	SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOF;
-	count = 0;
+	count = 1;
 	GPIO_PORTF_DIR_R = 0xFF;
 	GPIO_PORTF_AFSEL_R = 0x00;
 	GPIO_PORTF_DEN_R = 0xFF;

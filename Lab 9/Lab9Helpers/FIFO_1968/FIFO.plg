@@ -1,0 +1,15 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\Kevin\Documents\GitHub\EE319K\Lab 9\Lab9Helpers\FIFO_1968\FIFO_1968.uvproj
+Project File Date:  04/16/2013
+
+<h2>Output:</h2>
+Rebuild target 'FIFO'
+assembling Startup.s...
+compiling FIFOTestMain.c...
+FIFOTestMain.c(50): error:  #5: cannot open source input file "hw_types.h": No such file or directory
+compiling FIFO.c...
+Target not created

@@ -1,0 +1,57 @@
+Dependencies for Project 'Cosmonaut', Target 'BulletHell': (DO NOT MODIFY !)
+F (.\Startup.s)(0x51806F4C)(--cpu Cortex-M3 -g --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\actor.c)(0x518339A8)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "actor.o" --omf_browse "actor.crf" --depend "actor.d")
+I (actor.h)(0x51833A6E)
+I (sound.h)(0x5180EBE8)
+I (SysTick.h)(0x5180FE4D)
+I (utils.h)(0x51812950)
+I (graphics.h)(0x517FB7EE)
+I (draw.h)(0x517E24D5)
+I (rit128x96x4.h)(0x51811E1B)
+I (C:\Keil\ARM\ARMCC\bin\..\include\stdio.h)(0x4EB19766)
+F (.\graphics.c)(0x51811E0A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "graphics.o" --omf_browse "graphics.crf" --depend "graphics.d")
+I (graphics.h)(0x517FB7EE)
+I (rit128x96x4.h)(0x51811E1B)
+F (.\sound.c)(0x51814923)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "sound.o" --omf_browse "sound.crf" --depend "sound.d")
+I (dac.h)(0x515CA35E)
+I (..\inc\lm3s1968.h)(0x4C6193FC)
+F (.\SysTick.c)(0x518148D5)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "systick.o" --omf_browse "systick.crf" --depend "systick.d")
+I (..\inc/hw_types.h)(0x4C6193FC)
+I (..\driverlib/sysctl.h)(0x4C6193FA)
+I (..\inc\lm3s1968.h)(0x4C6193FC)
+F (.\Cosmonaut.c)(0x51833A02)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "cosmonaut.o" --omf_browse "cosmonaut.crf" --depend "cosmonaut.d")
+I (..\inc\lm3s1968.h)(0x4C6193FC)
+I (..\inc/hw_types.h)(0x4C6193FC)
+I (..\driverlib\sysctl.h)(0x4C6193FA)
+I (SysTick.h)(0x5180FE4D)
+I (rit128x96x4.h)(0x51811E1B)
+I (controller.h)(0x517E8F39)
+I (draw.h)(0x517E24D5)
+I (actor.h)(0x51833A6E)
+I (graphics.h)(0x517FB7EE)
+I (sound.h)(0x5180EBE8)
+I (utils.h)(0x51812950)
+I (adc.h)(0x5164C75A)
+I (sound1)(0x5180E1B5)
+F (.\utils.c)(0x51812D83)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "utils.o" --omf_browse "utils.crf" --depend "utils.d")
+F (..\driverlib\rvmdk\driverlib.lib)(0x4C6193FA)()
+F (.\draw.c)(0x517E80D0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "draw.o" --omf_browse "draw.crf" --depend "draw.d")
+I (rit128x96x4.h)(0x51811E1B)
+F (.\rit128x96x4.c)(0x4E3219D0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "rit128x96x4.o" --omf_browse "rit128x96x4.crf" --depend "rit128x96x4.d")
+I (..\inc/hw_ssi.h)(0x4C6193FC)
+I (..\inc/hw_memmap.h)(0x4C6193FC)
+I (..\inc/hw_sysctl.h)(0x4C6193FC)
+I (..\inc/hw_types.h)(0x4C6193FC)
+I (..\driverlib/debug.h)(0x4C6193FA)
+I (..\driverlib/gpio.h)(0x4C6193FA)
+I (..\driverlib/ssi.h)(0x4D640716)
+I (..\driverlib/sysctl.h)(0x4C6193FA)
+I (rit128x96x4.h)(0x51811E1B)
+F (.\controller.c)(0x5181424A)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "controller.o" --omf_browse "controller.crf" --depend "controller.d")
+I (controller.h)(0x517E8F39)
+I (..\inc\lm3s1968.h)(0x4C6193FC)
+I (..\inc/hw_types.h)(0x4C6193FC)
+I (..\driverlib\sysctl.h)(0x4C6193FA)
+F (.\dac.c)(0x51806F71)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "dac.o" --omf_browse "dac.crf" --depend "dac.d")
+F (.\adc.c)(0x5164C72D)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "adc.o" --omf_browse "adc.crf" --depend "adc.d")
+I (..\inc\lm3s1968.h)(0x4C6193FC)

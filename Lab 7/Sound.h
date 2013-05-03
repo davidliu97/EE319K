@@ -5,10 +5,11 @@ typedef enum {
 	Ef = Ds, E, Es,
 	F = Es, Fs,
 	Gf = Fs, G, Gs,
-	Af, A, As,
+	Af = Gs, A, As,
 	Bf = As, B, Bs = C,
-	Cf = B, 
+	Cf = B,
 	O,
+	Rest = -1
 } pitch; //contains 15 elements
 
 typedef struct {

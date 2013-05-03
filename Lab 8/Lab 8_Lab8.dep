@@ -1,0 +1,16 @@
+Dependencies for Project 'Lab 8', Target 'Lab8': (DO NOT MODIFY !)
+F (.\Startup.s)(0x515CA35E)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\Lab8.c)(0x5167099E)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "lab8.o" --omf_browse "lab8.crf" --depend "lab8.d")
+I (..\inc\hw_types.h)(0x4C6193FC)
+I (pll.h)(0x5164C098)
+I (adc.h)(0x5164C75A)
+I (LCD.h)(0x5164C0E7)
+I (SysTick.h)(0x515CA35E)
+F (.\pll.s)(0x5164C77B)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "pll.lst" --xref -o "pll.o" --depend "pll.d")
+F (.\LCD.s)(0x5164C0EA)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "LCD.lst" --xref -o "LCD.o" --depend "LCD.d")
+F (.\adc.c)(0x5164C72D)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "adc.o" --omf_browse "adc.crf" --depend "adc.d")
+I (..\inc\lm3s1968.h)(0x4C6193FC)
+F (.\SysTick.c)(0x5164C1CE)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "systick.o" --omf_browse "systick.crf" --depend "systick.d")
+I (..\inc\hw_types.h)(0x4C6193FC)
+I (..\driverlib\sysctl.h)(0x4C6193FA)
+F (..\driverlib\rvmdk\driverlib.lib)(0x4C6193FA)()

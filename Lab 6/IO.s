@@ -67,7 +67,7 @@ IO_Init
 ; This is a public function
 ; Invariables: This function must not permanently modify registers R4 to R11
 IO_Touch
-	BX LR ; For use in simulation mode
+;	BX LR ; For use in simulation mode
     PUSH  {R4,LR}
 	LDR R4, =PG7
 wait_down

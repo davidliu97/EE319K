@@ -1,0 +1,16 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\Kevin\Documents\GitHub\EE319K\FIFO_1968\FIFO_1968.uvproj
+Project File Date:  04/16/2013
+
+<h2>Output:</h2>
+Rebuild target 'FIFO'
+assembling Startup.s...
+compiling FIFOTestMain.c...
+compiling FIFO.c...
+linking...
+Program Size: Code=3076 RO-data=32 RW-data=56 ZI-data=1488  
+"FIFO.axf" - 0 Error(s), 0 Warning(s).

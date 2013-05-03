@@ -1,0 +1,6 @@
+Dependencies for Project 'UART', Target 'UART': (DO NOT MODIFY !)
+F (.\Startup.s)(0x4BB255AA)(--device DLM --pd "__EVAL SETA 1" -g --apcs=interwork --pd "__MICROLIB SETA 1" -I "D:\Keil\ARM\INC\Luminary" -o "Startup.o")
+F (.\UART.c)(0x4E41DB06)(-c --device DLM -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "D:\Keil\ARM\INC\Luminary" -o "uart.o" --omf_browse "uart.crf" --depend "uart.d")
+I (UART.h)(0x4E41DB05)
+F (.\UARTTestMain.c)(0x4F174788)(-c --device DLM -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "D:\Keil\ARM\INC\Luminary" -o "uarttestmain.o" --omf_browse "uarttestmain.crf" --depend "uarttestmain.d")
+F (..\driverlib\rvmdk\driverlib.lib)(0x00000000)()

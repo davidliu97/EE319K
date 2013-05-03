@@ -1,0 +1,8 @@
+Dependencies for Project 'Lab 8', Target 'Lab7': (DO NOT MODIFY !)
+F (.\Startup.s)(0x515CA35E)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary --list "Startup.lst" --xref -o "Startup.o" --depend "Startup.d")
+F (.\SysTickInts.c)(0x515DB902)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "systickints.o" --omf_browse "systickints.crf" --depend "systickints.d")
+F (.\dac.c)(0x515DB8CC)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "dac.o" --omf_browse "dac.crf" --depend "dac.d")
+F (.\Lab7.c)(0x515DC9D9)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "lab7.o" --omf_browse "lab7.crf" --depend "lab7.d")
+F (.\Piano.c)(0x515DBB9F)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "piano.o" --omf_browse "piano.crf" --depend "piano.d")
+F (.\Sound.c)(0x515DC5F3)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\Luminary -o "sound.o" --omf_browse "sound.crf" --depend "sound.d")
+F (..\driverlib\rvmdk\driverlib.lib)(0x4C6193FA)()

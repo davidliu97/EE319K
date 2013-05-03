@@ -1,0 +1,8 @@
+Dependencies for Project 'UART2', Target 'UART2': (DO NOT MODIFY !)
+F (.\Startup.s)(0x4E53C624)(--cpu Cortex-M3 -g --apcs=interwork --pd "__MICROLIB SETA 1" -I "f:\Keil\ARM\INC" -I "f:\Keil\ARM\INC\Luminary" -o "Startup.o" --depend "Startup.d")
+F (.\UART2.c)(0x516F5807)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "f:\Keil\ARM\INC" -I "f:\Keil\ARM\INC\Luminary" -o "uart2.o" --omf_browse "uart2.crf" --depend "uart2.d")
+I (FIFO.h)(0x4E41D9AE)
+I (UART2.h)(0x4E91EFCF)
+F (.\UART2TestMain.c)(0x4F17474C)(-c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork -I.. -I..\..\.. -I "f:\Keil\ARM\INC" -I "f:\Keil\ARM\INC\Luminary" -o "uart2testmain.o" --omf_browse "uart2testmain.crf" --depend "uart2testmain.d")
+I (UART2.h)(0x4E91EFCF)
+F (..\driverlib\rvmdk\driverlib.lib)(0x00000000)()

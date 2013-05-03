@@ -35,10 +35,10 @@
 #define NVIC_ST_CTRL_CLK_SRC    0x00000004  // Clock Source
 #define NVIC_ST_CTRL_INTEN      0x00000002  // Interrupt enable
 #define NVIC_ST_CTRL_ENABLE     0x00000001  // Counter mode
-#define GPIO_PORTG_DIR_R        (*((volatile unsigned long *)0x40026400))
-#define GPIO_PORTG_DEN_R        (*((volatile unsigned long *)0x4002651C))
+#define GPIO_PORTD_DIR_R        (*((volatile unsigned long *)0x40007400))
+#define GPIO_PORTD_DEN_R        (*((volatile unsigned long *)0x4000751C))
 #define SYSCTL_RCGC2_R          (*((volatile unsigned long *)0x400FE108))
-#define SYSCTL_RCGC2_GPIOG      0x00000040  // port D Clock Gating Control
+#define SYSCTL_RCGC2_GPIOD      0x00000008  // port D Clock Gating Control
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
@@ -55,10 +55,11 @@ volatile unsigned long Counts = 0;
 //        Minimum is determined by lenght of ISR
 // Output: none
 void SysTick_Init(unsigned long period){
-  SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOG; // activate port D
-  Counts = 0;
-  GPIO_PORTG_DIR_R |= 0x04;   // make PD0 out
-  GPIO_PORTG_DEN_R |= 0x04;   // enable digital I/O on PD0
+  SYSCTL_RCGC2_R |= SYSCTL_RCGC2_GPIOD; // activate port D
+  Counts = 1;
+	Counts = 0;
+  GPIO_PORTD_DIR_R |= 0x01;   // make PD0 out
+  GPIO_PORTD_DEN_R |= 0x01;   // enable digital I/O on PD0
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_RELOAD_R = period-1;// reload value
   NVIC_ST_CURRENT_R = 0;      // any write to current clears it

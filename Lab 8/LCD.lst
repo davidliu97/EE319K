@@ -1,0 +1,992 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; LCD.s
+    2 00000000         ; Runs on LM3S1968
+    3 00000000         ; EE319K lab 6 device driver for the LCD
+    4 00000000         ; Valvano
+    5 00000000         ; March 2, 2013 (Spring 2013 version)
+    6 00000000         ;
+    7 00000000         ;  size is 1*16
+    8 00000000         ;  because we do not need to read busy, then we will tie
+                        R/W=ground
+    9 00000000         ;  10k potentiometer (not the slide pot for Lab 8)
+   10 00000000         ;      one end of pot is +5V, 
+   11 00000000         ;      center of pot to pin 3 of LCD,
+   12 00000000         ;      other end of pot is ground
+   13 00000000         ;  ground = pin 1    Vss
+   14 00000000         ;  power  = pin 2    Vdd   +5V (EE319K LCDs)
+   15 00000000         ;  pot    = pin 3    Vlc   connected to center of pot
+   16 00000000         ;  PF4    = pin 4    RS    (1 for data, 0 for control/st
+                       atus)
+   17 00000000         ;  ground = pin 5    R/W   (1 for read, 0 for write)
+   18 00000000         ;  PF5    = pin 6    E     (enable)
+   19 00000000         ;  PF0    = pin 11   DB4   (4-bit data)
+   20 00000000         ;  PF1    = pin 12   DB5
+   21 00000000         ;  PF2    = pin 13   DB6
+   22 00000000         ;  PF3    = pin 14   DB7
+   23 00000000         ;16 characters are configured as 2 rows of 8
+   24 00000000         ;addr  00 01 02 03 04 05 06 07 40 41 42 43 44 45 46 47
+   25 00000000         
+   26 00000000         
+   27 00000000                 EXPORT           LCD_Open
+   28 00000000                 EXPORT           LCD_Clear
+   29 00000000                 EXPORT           LCD_OutChar
+   30 00000000                 EXPORT           LCD_GoTo
+   31 00000000                 EXPORT           LCD_OutString
+   32 00000000                 EXPORT           LCD_OutDec
+   33 00000000                 EXPORT           LCD_OutFix
+   34 00000000                 EXPORT           LCD_NewChar
+   35 00000000         
+   36 00000000 400FE108 
+                       SYSCTL_RCGC2_R
+                               EQU              0x400FE108
+   37 00000000 00000020 
+                       SYSCTL_RCGC2_GPIOF
+                               EQU              0x00000020  ; port F Clock Gati
+                                                            ng Control
+   38 00000000         
+   39 00000000 4002503C 
+                       LCD_DATA_NIBBLE_R
+                               EQU              0x4002503C
+   40 00000000 40025080 
+                       LCD_LATCH
+                               EQU              0x40025080
+   41 00000000 40025040 
+                       LCD_RS  EQU              0x40025040
+   42 00000000 40025400 
+                       GPIO_PORTF_DIR_R
+                               EQU              0x40025400
+   43 00000000 40025420 
+                       GPIO_PORTF_AFSEL_R
+                               EQU              0x40025420
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   44 00000000 4002551C 
+                       GPIO_PORTF_DEN_R
+                               EQU              0x4002551C
+   45 00000000         
+   46 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   47 00000000                 THUMB
+   48 00000000                 ALIGN
+   49 00000000         
+   50 00000000         OutFixedOFString
+   51 00000000 2A 2E 2A 
+              2A 2A 00         DCB              "*.***",0
+   52 00000006 00 00           ALIGN
+   53 00000008         
+   54 00000008         ;--------------- outCsrNibble ------------------
+   55 00000008         ; Sends 4 bits to the LCD control/status
+   56 00000008         ; Input: R0 is 4-bit command, in bit positions 3,2,1,0 o
+                       f R0
+   57 00000008         ; Output: none
+   58 00000008         ; This is a private function
+   59 00000008         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+   60 00000008         outCsrNibble
+   61 00000008 B530            PUSH             {R4,R5,R14} ;Push registers tha
+                                                            t we plan to use on
+                                                            to the stack
+   62 0000000A 4604            MOV              R4, R0      ;Move the 4-bit com
+                                                            mand into R4 for ma
+                                                            nipulation
+   63 0000000C 4D9F            LDR              R5, =LCD_DATA_NIBBLE_R
+   64 0000000E 602C            STR              R4, [R5]
+   65 00000010 F000 F91C       BL               wait6us
+   66 00000014 4C9E            LDR              R4, =LCD_LATCH ;
+   67 00000016 F04F 00FF       MOV              R0, #0xFF
+   68 0000001A 6020            STR              R0, [R4]
+   69 0000001C F000 F916       BL               wait6us
+   70 00000020 F04F 0000       MOV              R0, #0
+   71 00000024 6020            STR              R0, [R4]
+   72 00000026 F000 F911       BL               wait6us
+   73 0000002A BD30            POP              {R4,R5,PC}
+   74 0000002C         
+   75 0000002C         
+   76 0000002C         ;---------------------outCsr---------------------
+   77 0000002C         ; Sends one command code to the LCD control/status
+   78 0000002C         ; Input: R0 is 8-bit command to execute
+   79 0000002C         ; Output: none
+   80 0000002C         ;* Entry Mode Set 0,0,0,0,0,1,I/D,S
+   81 0000002C         ;*     I/D=1 for increment cursor move direction
+   82 0000002C         ;*        =0 for decrement cursor move direction
+   83 0000002C         ;*     S  =1 for display shift
+   84 0000002C         ;*        =0 for no display shift
+   85 0000002C         ;*   Display On/Off Control 0,0,0,0,1,D,C,B
+   86 0000002C         ;*     D  =1 for display on
+   87 0000002C         ;*        =0 for display off
+   88 0000002C         ;*     C  =1 for cursor on
+   89 0000002C         ;*        =0 for cursor off
+   90 0000002C         ;*     B  =1 for blink of cursor position character
+   91 0000002C         ;*        =0 for no blink
+   92 0000002C         ;*   Cursor/Display Shift  0,0,0,1,S/C,R/L,*,*
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   93 0000002C         ;*     S/C=1 for display shift
+   94 0000002C         ;*        =0 for cursor movement
+   95 0000002C         ;*     R/L=1 for shift to left
+   96 0000002C         ;*        =0 for shift to right
+   97 0000002C         ;*   Function Set   0,0,1,DL,N,F,*,*
+   98 0000002C         ;*     DL=1 for 8 bit
+   99 0000002C         ;*       =0 for 4 bit
+  100 0000002C         ;*     N =1 for 2 lines
+  101 0000002C         ;*       =0 for 1 line
+  102 0000002C         ;*     F =1 for 5 by 10 dots
+  103 0000002C         ;*       =0 for 5 by 7 dots 
+  104 0000002C         ; This is a private function
+  105 0000002C         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  106 0000002C         outCsr
+  107 0000002C B510            PUSH             {R4,LR}     ;Push R4 onto the s
+                                                            tack to use it as a
+                                                             local variable
+  108 0000002E 4604            MOV              R4, R0
+  109 00000030         
+  110 00000030 F04F 0000       MOV              R0, #0
+  111 00000034 4997            LDR              R1, =LCD_RS ;Set the RS Latch t
+                                                            o 0
+  112 00000036 6008            STR              R0, [R1]    ;
+  113 00000038 F000 F908       BL               wait6us
+  114 0000003C         
+  115 0000003C EA4F 1014       LSR              R0, R4, #4  ;Call outCsrNibble 
+                                                            twice and righ shif
+                                                            t the first 4 bits 
+                                                            to set the 4 most s
+                                                            ignificant bits
+  116 00000040 F7FF FFE2       BL               outCsrNibble
+  117 00000044 4620            MOV              R0, R4
+  118 00000046 F7FF FFDF       BL               outCsrNibble
+  119 0000004A         
+  120 0000004A F04F 010F       MOV              R1, #15
+  121 0000004E F000 F903       BL               wait90us    ;Blind Cycle Wait 9
+                                                            0us
+  122 00000052 BD10            POP              {R4,PC}
+  123 00000054         
+  124 00000054         ;---------------------LCD_Open---------------------
+  125 00000054         ; initialize the LCD display, called once at beginning
+  126 00000054         ; Input: none
+  127 00000054         ; Output: none
+  128 00000054         ; This is a public function
+  129 00000054         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  130 00000054         LCD_Open
+  131 00000054 B500            PUSH             {LR}
+  132 00000056         ; Code footprint is lighter with 4 branches than a loop.
+                       
+  133 00000056 F000 F90D       BL               wait5ms
+  134 0000005A F000 F90B       BL               wait5ms
+  135 0000005E F000 F909       BL               wait5ms
+  136 00000062 F000 F907       BL               wait5ms
+  137 00000066         ; Initialize clock.
+  138 00000066 498C            LDR              R1, =SYSCTL_RCGC2_R
+  139 00000068 6808            LDR              R0, [R1]
+  140 0000006A F04F 0220       LDR              R2, =SYSCTL_RCGC2_GPIOF
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  141 0000006E EA40 0002       ORR              R0, R0, R2
+  142 00000072 6008            STR              R0, [R1]
+  143 00000074 BF00            NOP
+  144 00000076 BF00            NOP
+  145 00000078         ; Configure pins.
+  146 00000078 4988            LDR              R1, =GPIO_PORTF_AFSEL_R
+  147 0000007A 6808            LDR              R0, [R1]
+  148 0000007C F020 003F       BIC              R0, R0, #0x3F
+  149 00000080 6008            STR              R0, [R1]
+  150 00000082 4987            LDR              R1, =GPIO_PORTF_DIR_R
+  151 00000084 6808            LDR              R0, [R1]
+  152 00000086 F040 003F       ORR              R0, R0, #0x3F
+  153 0000008A 6008            STR              R0, [R1]
+  154 0000008C 4985            LDR              R1, =GPIO_PORTF_DEN_R
+  155 0000008E 6808            LDR              R0, [R1]
+  156 00000090 F040 003F       ORR              R0, R0, #0x3F
+  157 00000094 6008            STR              R0, [R1]
+  158 00000096         ; Set RS to command write (outCsrNibble does not)
+  159 00000096 F04F 0000       MOV              R0, #0
+  160 0000009A 497E            LDR              R1, =LCD_RS
+  161 0000009C 6008            STR              R0, [R1]
+  162 0000009E F000 F8D5       BL               wait6us
+  163 000000A2         
+  164 000000A2 F04F 0003       MOV              R0, #0x03
+  165 000000A6 F7FF FFAF       BL               outCsrNibble
+  166 000000AA F000 F8E3       BL               wait5ms
+  167 000000AE F04F 0003       MOV              R0, #0x03
+  168 000000B2 F7FF FFA9       BL               outCsrNibble
+  169 000000B6 F000 F8CF       BL               wait100us
+  170 000000BA F04F 0003       MOV              R0, #0x03
+  171 000000BE F7FF FFA3       BL               outCsrNibble
+  172 000000C2 F000 F8C9       BL               wait100us
+  173 000000C6 F04F 0002       MOV              R0, #0x02
+  174 000000CA F7FF FF9D       BL               outCsrNibble
+  175 000000CE F000 F8C3       BL               wait100us
+  176 000000D2 F04F 0028       MOV              R0, #0x28
+  177 000000D6 F7FF FFA9       BL               outCsr
+  178 000000DA F04F 0014       MOV              R0, #0x14
+  179 000000DE F7FF FFA5       BL               outCsr
+  180 000000E2 F04F 0006       MOV              R0, #0x06
+  181 000000E6 F7FF FFA1       BL               outCsr
+  182 000000EA F04F 000C       MOV              R0, #0x0C
+  183 000000EE F7FF FF9D       BL               outCsr
+  184 000000F2         
+  185 000000F2 BD00            POP              {PC}
+  186 000000F4         
+  187 000000F4         
+  188 000000F4         ;---------------------LCD_OutChar---------------------
+  189 000000F4         ; sends one ASCII to the LCD display
+  190 000000F4         ; Input: R0 (call by value) letter is 8-bit ASCII code
+  191 000000F4         ; Outputs: none
+  192 000000F4         ; This is a public function
+  193 000000F4         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  194 000000F4         LCD_OutChar
+  195 000000F4 B510            PUSH             {R4,LR}
+  196 000000F6 4604            MOV              R4, R0
+  197 000000F8         ; Set RS to data write
+  198 000000F8 F04F 00FF       MOV              R0, #0xFF
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  199 000000FC 4965            LDR              R1, =LCD_RS
+  200 000000FE 6008            STR              R0, [R1]
+  201 00000100 F000 F8A4       BL               wait6us
+  202 00000104         
+  203 00000104 EA4F 1014       LSR              R0, R4, #4  ;Outputs the most s
+                                                            ignificant bits fir
+                                                            st by bit shifting 
+                                                            right 4 times
+  204 00000108 F7FF FF7E       BL               outCsrNibble
+  205 0000010C 4620            MOV              R0, R4      ;Outputs the least 
+                                                            significant bits.
+  206 0000010E F7FF FF7B       BL               outCsrNibble
+  207 00000112 F000 F8A1       BL               wait90us
+  208 00000116         
+  209 00000116 BD10            POP              {R4,PC}     ;Restores R4
+  210 00000118         
+  211 00000118         ;---------------------LCD_Clear---------------------
+  212 00000118         ; clear the LCD display, send cursor to home
+  213 00000118         ; Input: none
+  214 00000118         ; Outputs: none
+  215 00000118         ; This is a public function
+  216 00000118         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  217 00000118         LCD_Clear
+  218 00000118 B500            PUSH             {LR}
+  219 0000011A F04F 0001       MOV              R0, #0x01
+  220 0000011E F7FF FF85       BL               outCsr
+  221 00000122 F000 F8A7       BL               wait5ms
+  222 00000126 F04F 0002       MOV              R0, #0x02
+  223 0000012A F7FF FF7F       BL               outCsr
+  224 0000012E F000 F8A1       BL               wait5ms
+  225 00000132 BD00            POP              {PC}
+  226 00000134         
+  227 00000134         
+  228 00000134         ;-----------------------LCD_GoTo-----------------------
+  229 00000134         ; Move cursor (set display address) 
+  230 00000134         ; Input: R0 is display address (DDaddr) is 0 to 7, or 0x
+                       40 to 0x47 
+  231 00000134         ; Output: none
+  232 00000134         ; errors: it will check for legal address
+  233 00000134         ;  0) save any registers that will be destroyed by pushi
+                       ng on the stack
+  234 00000134         ;  1) go to step 3 if DDaddr is 0x08 to 0x3F or 0x48 to 
+                       0xFFFFFFFF
+  235 00000134         ;  2) outCsr(DDaddr+0x80)     
+  236 00000134         ;  3) restore the registers by pulling off the stack
+  237 00000134         ; This is a public function
+  238 00000134         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  239 00000134         LCD_GoTo
+  240 00000134 B500            PUSH             {LR}
+  241 00000136 F000 00FF       AND              R0, R0, #0xFF ;Creates 2 ranges
+                                                             that the DDaddr ca
+                                                            n be between: 0x08 
+                                                            - 0x3F and 0x48 - 0
+                                                            xFFFFFFFF
+  242 0000013A 2808            CMP              R0, #0x08
+  243 0000013C D903            BLS              GOMove
+  244 0000013E 283F            CMP              R0, #0x3F
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  245 00000140 D905            BLS              GODone
+  246 00000142 2848            CMP              R0, #0x48
+  247 00000144 DA03            BGE              GODone
+  248 00000146         GOMove
+  249 00000146 F100 0080       ADD              R0, R0, #0x80
+  250 0000014A F7FF FF6F       BL               outCsr
+  251 0000014E         GODone
+  252 0000014E BD00            POP              {PC}
+  253 00000150         
+  254 00000150         ; ---------------------LCD_OutString-------------
+  255 00000150         ; Output character string to LCD display, terminated by 
+                       a NULL(0)
+  256 00000150         ; Inputs:  R0 (call by reference) points to a string of 
+                       ASCII characters 
+  257 00000150         ; Outputs: none
+  258 00000150         ; This is a public function
+  259 00000150         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  260 00000150         LCD_OutString
+  261 00000150 B510            PUSH             {R4,LR}
+  262 00000152 4604            MOV              R4, R0
+  263 00000154 F04F 0200       MOV              R2, #0
+  264 00000158         STLoop
+  265 00000158 5CA0            LDRB             R0, [R4, R2] ;Loads the first c
+                                                            haracter of the str
+                                                            ing
+  266 0000015A 2800            CMP              R0, #0
+  267 0000015C D004            BEQ              STDone
+  268 0000015E F7FF FFFE       BL               LCD_OutChar
+  269 00000162 F102 0201       ADD              R2, #1      ;Increments the arr
+                                                            ay pointer to get t
+                                                            he next character o
+                                                            f the string
+  270 00000166 E7F7            B                STLoop
+  271 00000168         STDone
+  272 00000168 BD10            POP              {R4,PC}     ;Restores used regi
+                                                            sters and PC
+  273 0000016A         
+  274 0000016A         
+  275 0000016A         ;-----------------------LCD_NewChar--------------------
+  276 0000016A         ; Set new font (single character) 
+  277 0000016A         ; Input: R0 is CGaddr or font number (0-7), R1 is addres
+                       s of 8-byte font.
+  278 0000016A         ; Output: none; the font can be printed with LCD_OutChar
+                       (CGaddr)
+  279 0000016A         ; errors: it will check for legal address
+  280 0000016A         ;  0) save any registers that will be destroyed by pushi
+                       ng on the stack
+  281 0000016A         ;  1) go to step 4 if CGaddr is 0x08 to 0xFFFFFFFF
+  282 0000016A         ;  2) outCsr((CGaddr<<3)+0x40)
+  283 0000016A         ;  3) output each line of the font
+  284 0000016A         ;  4) restore the registers by pulling off the stack
+  285 0000016A         ; This is a public function
+  286 0000016A         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  287 0000016A         LCD_NewChar
+  288 0000016A B510            PUSH             {R4,LR}
+  289 0000016C 2807            CMP              R0, #7
+  290 0000016E D814            BHI              DoneNewChar
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  291 00000170 460C            MOV              R4, R1
+  292 00000172 EA4F 00C0       LSL              R0, R0, #3
+  293 00000176 F100 0040       ADD              R0, R0, #0x40
+  294 0000017A F7FF FF57       BL               outCsr
+  295 0000017E F04F 0200       MOV              R2, #0
+  296 00000182         NCLoop
+  297 00000182 5CA0            LDRB             R0, [R4, R2]
+  298 00000184 F7FF FFFE       BL               LCD_OutChar
+  299 00000188 F102 0201       ADD              R2, #1
+  300 0000018C 2A08            CMP              R2, #8
+  301 0000018E D004            BEQ              DoneNewChar
+  302 00000190 E7F7            B                NCLoop
+  303 00000192 F04F 0080       MOV              R0, #0x80
+  304 00000196 F7FF FF49       BL               outCsr
+  305 0000019A         DoneNewChar
+  306 0000019A BD10            POP              {R4,PC}
+  307 0000019C         
+  308 0000019C         ;-----------------------LCD_OutDec----------------------
+                       -
+  309 0000019C         ; Output a 32-bit number in unsigned decimal format
+  310 0000019C         ; Input: R0 (call by value) 32-bit unsigned number 
+  311 0000019C         ; Output: none
+  312 0000019C         ; This is a public function
+  313 0000019C         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  314 0000019C         LCD_OutDec                           ;Used Recursion to 
+                                                            print out decimals.
+                                                            
+  315 0000019C B510            PUSH             {R4,LR}
+  316 0000019E B081            SUB              SP, #4
+  317 000001A0 280A            CMP              R0, #10     ;Check for end digi
+                                                            t
+  318 000001A2 D30A            BLO              ODendcase
+  319 000001A4 F04F 010A       MOV              R1, #10
+  320 000001A8 FBB0 F4F1       UDIV             R4, R0, R1
+  321 000001AC F000 F847       BL               MOD
+  322 000001B0 9000            STR              R0, [SP]
+  323 000001B2 4620            MOV              R0, R4
+  324 000001B4 F7FF FFFE       BL               LCD_OutDec
+  325 000001B8 9800            LDR              R0, [SP]
+  326 000001BA         ODendcase                            ;Adds last digit, a
+                                                            nd restores registe
+                                                            rs and PC
+  327 000001BA F100 0030       ADD              R0, #0x30
+  328 000001BE F7FF FFFE       BL               LCD_OutChar
+  329 000001C2 B001            ADD              SP, #4
+  330 000001C4 BD10            POP              {R4,PC}
+  331 000001C6         
+  332 000001C6         
+  333 000001C6         ; -----------------------LCD _OutFix--------------------
+                       --
+  334 000001C6         ; Output characters to LCD display in fixed-point format
+                       
+  335 000001C6         ; unsigned decimal, resolution 0.001, range 0.000 to 9.9
+                       99 
+  336 000001C6         ; Inputs:  R0 is an unsigned 16-bit number
+  337 000001C6         ; Outputs: none
+  338 000001C6         ; E.g., R0=0,    then output "0.000 " 
+  339 000001C6         ;       R0=3,    then output "0.003 " 
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  340 000001C6         ;       R0=89,   then output "0.089 " 
+  341 000001C6         ;       R0=123,  then output "0.123 " 
+  342 000001C6         ;       R0=9999, then output "9.999 " 
+  343 000001C6         ;       R0>9999, then output "*.*** "
+  344 000001C6         ; This is a public function
+  345 000001C6         ; Invariables: This function must not permanently modify
+                        registers R4 to R11
+  346 000001C6         
+  347 000001C6         LCD_OutFix
+  348 000001C6 B510            PUSH             {R4,LR}     ;Push used register
+                                                            s
+  349 000001C8 F242 710F       LDR              R1, =9999   ;Check for overflow
+                                                            , i.e. any number o
+                                                            ver 9999
+  350 000001CC 4288            CMP              R0, R1
+  351 000001CE D832            BHI              OFOverflow
+  352 000001D0         
+  353 000001D0 4604            MOV              R4, R0      ;Determines the lea
+                                                            st significant digi
+                                                            t (The one's place)
+                                                            
+  354 000001D2 F44F 717A       MOV              R1, #1000   ;Divides input by 1
+                                                            000
+  355 000001D6 FBB4 F0F1       UDIV             R0, R4, R1  ;
+  356 000001DA F100 0030       ADD              R0, #0x30   ;Converts to ASCII
+  357 000001DE F7FF FFFE       BL               LCD_OutChar
+  358 000001E2         
+  359 000001E2 F04F 002E       MOV              R0, #0x2E
+  360 000001E6 F7FF FFFE       BL               LCD_OutChar
+  361 000001EA         
+  362 000001EA 4620            MOV              R0, R4
+  363 000001EC F44F 717A       MOV              R1, #1000
+  364 000001F0 F000 F825       BL               MOD         ;Modifies the input
+                                                             so that it is miss
+                                                            ing the least signi
+                                                            ficant bit
+  365 000001F4 4604            MOV              R4, R0
+  366 000001F6         
+  367 000001F6 F04F 0164       MOV              R1, #100    ;Determines the ten
+                                                            's place
+  368 000001FA FBB4 F0F1       UDIV             R0, R4, R1
+  369 000001FE F100 0030       ADD              R0, #0x30
+  370 00000202 F7FF FFFE       BL               LCD_OutChar
+  371 00000206 4620            MOV              R0, R4
+  372 00000208 F04F 0164       MOV              R1, #100
+  373 0000020C F000 F817       BL               MOD
+  374 00000210 4604            MOV              R4, R0
+  375 00000212         
+  376 00000212 F04F 010A       MOV              R1, #10     ;Determines the hun
+                                                            dred's place
+  377 00000216 FBB4 F0F1       UDIV             R0, R4, R1
+  378 0000021A F100 0030       ADD              R0, #0x30
+  379 0000021E F7FF FFFE       BL               LCD_OutChar
+  380 00000222 4620            MOV              R0, R4
+  381 00000224 F04F 010A       MOV              R1, #10
+  382 00000228 F000 F809       BL               MOD
+  383 0000022C         
+  384 0000022C F100 0030       ADD              R0, #0x30   ;Prints the most si
+                                                            gnificant digit
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  385 00000230 F7FF FFFE       BL               LCD_OutChar
+  386 00000234         
+  387 00000234 BD10            POP              {R4,PC}
+  388 00000236         OFOverflow
+  389 00000236 481C            LDR              R0, =OutFixedOFString 
+                                                            ;Outputs *.***
+  390 00000238 F7FF FFFE       BL               LCD_OutString
+  391 0000023C BD10            POP              {R4,PC}
+  392 0000023E         
+  393 0000023E         
+  394 0000023E         ; Lots of Wait loops and our Modulo subroutine
+  395 0000023E         MOD
+  396 0000023E FBB0 F2F1       UDIV             R2, R0, R1
+  397 00000242 FB01 F102       MUL              R1, R2
+  398 00000246 EBA0 0001       SUB              R0, R1
+  399 0000024A 4770            BX               LR
+  400 0000024C         
+  401 0000024C         wait6us
+  402 0000024C B500            PUSH             {LR}
+  403 0000024E F04F 0064       MOV              R0, #100
+  404 00000252         wait6us_loop
+  405 00000252 3801            SUBS             R0, #1
+  406 00000254 D1FD            BNE              wait6us_loop
+  407 00000256 BD00            POP              {PC}
+  408 00000258         
+  409 00000258         wait90us
+  410 00000258         wait100us
+  411 00000258         ; 100us waits 90us, there is little difference
+  412 00000258 B500            PUSH             {LR}
+  413 0000025A F04F 010F       MOV              R1, #15
+  414 0000025E         wait90us_loop
+  415 0000025E F7FF FFF5       BL               wait6us
+  416 00000262 3901            SUBS             R1, #1
+  417 00000264 D1FB            BNE              wait90us_loop
+  418 00000266 BD00            POP              {PC}
+  419 00000268         
+  420 00000268         wait1ms
+  421 00000268 B500            PUSH             {LR}
+  422 0000026A F244 101A       LDR              R0, =0x411A
+  423 0000026E         busy_loop
+  424 0000026E 1E40            SUBS             R0, R0, #0x01
+  425 00000270 D1FD            BNE              busy_loop
+  426 00000272 BD00            POP              {PC}
+  427 00000274         
+  428 00000274         wait5ms
+  429 00000274 B500            PUSH             {LR}
+  430 00000276 F7FF FFF7       BL               wait1ms
+  431 0000027A F7FF FFF5       BL               wait1ms
+  432 0000027E F7FF FFF3       BL               wait1ms
+  433 00000282 F7FF FFF1       BL               wait1ms
+  434 00000286 F7FF FFEF       BL               wait1ms
+  435 0000028A BD00            POP              {PC}
+  436 0000028C         
+  437 0000028C                 ALIGN                        ; make sure the end
+                                                             of this section is
+                                                             aligned
+  438 0000028C                 END                          ; end of file
+              4002503C 
+              40025080 
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+              40025040 
+              400FE108 
+              40025420 
+              40025400 
+              4002551C 
+              00000000 
+Command Line: --debug --xref --cpu=Cortex-M3 --apcs=interwork --depend=LCD.d -o
+LCD.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\ARM\Inc\Lumi
+nary --predefine="__MICROLIB SETA 1" --list=LCD.lst LCD.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 46 in file LCD.s
+   Uses
+      None
+Comment: .text unused
+DoneNewChar 0000019A
+
+Symbol: DoneNewChar
+   Definitions
+      At line 305 in file LCD.s
+   Uses
+      At line 290 in file LCD.s
+      At line 301 in file LCD.s
+
+GODone 0000014E
+
+Symbol: GODone
+   Definitions
+      At line 251 in file LCD.s
+   Uses
+      At line 245 in file LCD.s
+      At line 247 in file LCD.s
+
+GOMove 00000146
+
+Symbol: GOMove
+   Definitions
+      At line 248 in file LCD.s
+   Uses
+      At line 243 in file LCD.s
+Comment: GOMove used once
+LCD_Clear 00000118
+
+Symbol: LCD_Clear
+   Definitions
+      At line 217 in file LCD.s
+   Uses
+      At line 28 in file LCD.s
+Comment: LCD_Clear used once
+LCD_GoTo 00000134
+
+Symbol: LCD_GoTo
+   Definitions
+      At line 239 in file LCD.s
+   Uses
+      At line 30 in file LCD.s
+Comment: LCD_GoTo used once
+LCD_NewChar 0000016A
+
+Symbol: LCD_NewChar
+   Definitions
+      At line 287 in file LCD.s
+   Uses
+      At line 34 in file LCD.s
+Comment: LCD_NewChar used once
+LCD_Open 00000054
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: LCD_Open
+   Definitions
+      At line 130 in file LCD.s
+   Uses
+      At line 27 in file LCD.s
+Comment: LCD_Open used once
+LCD_OutChar 000000F4
+
+Symbol: LCD_OutChar
+   Definitions
+      At line 194 in file LCD.s
+   Uses
+      At line 29 in file LCD.s
+      At line 268 in file LCD.s
+      At line 298 in file LCD.s
+      At line 328 in file LCD.s
+      At line 357 in file LCD.s
+      At line 360 in file LCD.s
+      At line 370 in file LCD.s
+      At line 379 in file LCD.s
+      At line 385 in file LCD.s
+
+LCD_OutDec 0000019C
+
+Symbol: LCD_OutDec
+   Definitions
+      At line 314 in file LCD.s
+   Uses
+      At line 32 in file LCD.s
+      At line 324 in file LCD.s
+
+LCD_OutFix 000001C6
+
+Symbol: LCD_OutFix
+   Definitions
+      At line 347 in file LCD.s
+   Uses
+      At line 33 in file LCD.s
+Comment: LCD_OutFix used once
+LCD_OutString 00000150
+
+Symbol: LCD_OutString
+   Definitions
+      At line 260 in file LCD.s
+   Uses
+      At line 31 in file LCD.s
+      At line 390 in file LCD.s
+
+MOD 0000023E
+
+Symbol: MOD
+   Definitions
+      At line 395 in file LCD.s
+   Uses
+      At line 321 in file LCD.s
+      At line 364 in file LCD.s
+      At line 373 in file LCD.s
+      At line 382 in file LCD.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+
+NCLoop 00000182
+
+Symbol: NCLoop
+   Definitions
+      At line 296 in file LCD.s
+   Uses
+      At line 302 in file LCD.s
+Comment: NCLoop used once
+ODendcase 000001BA
+
+Symbol: ODendcase
+   Definitions
+      At line 326 in file LCD.s
+   Uses
+      At line 318 in file LCD.s
+Comment: ODendcase used once
+OFOverflow 00000236
+
+Symbol: OFOverflow
+   Definitions
+      At line 388 in file LCD.s
+   Uses
+      At line 351 in file LCD.s
+Comment: OFOverflow used once
+OutFixedOFString 00000000
+
+Symbol: OutFixedOFString
+   Definitions
+      At line 50 in file LCD.s
+   Uses
+      At line 389 in file LCD.s
+Comment: OutFixedOFString used once
+STDone 00000168
+
+Symbol: STDone
+   Definitions
+      At line 271 in file LCD.s
+   Uses
+      At line 267 in file LCD.s
+Comment: STDone used once
+STLoop 00000158
+
+Symbol: STLoop
+   Definitions
+      At line 264 in file LCD.s
+   Uses
+      At line 270 in file LCD.s
+Comment: STLoop used once
+busy_loop 0000026E
+
+Symbol: busy_loop
+   Definitions
+      At line 423 in file LCD.s
+   Uses
+      At line 425 in file LCD.s
+Comment: busy_loop used once
+outCsr 0000002C
+
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: outCsr
+   Definitions
+      At line 106 in file LCD.s
+   Uses
+      At line 177 in file LCD.s
+      At line 179 in file LCD.s
+      At line 181 in file LCD.s
+      At line 183 in file LCD.s
+      At line 220 in file LCD.s
+      At line 223 in file LCD.s
+      At line 250 in file LCD.s
+      At line 294 in file LCD.s
+      At line 304 in file LCD.s
+
+outCsrNibble 00000008
+
+Symbol: outCsrNibble
+   Definitions
+      At line 60 in file LCD.s
+   Uses
+      At line 116 in file LCD.s
+      At line 118 in file LCD.s
+      At line 165 in file LCD.s
+      At line 168 in file LCD.s
+      At line 171 in file LCD.s
+      At line 174 in file LCD.s
+      At line 204 in file LCD.s
+      At line 206 in file LCD.s
+
+wait100us 00000258
+
+Symbol: wait100us
+   Definitions
+      At line 410 in file LCD.s
+   Uses
+      At line 169 in file LCD.s
+      At line 172 in file LCD.s
+      At line 175 in file LCD.s
+
+wait1ms 00000268
+
+Symbol: wait1ms
+   Definitions
+      At line 420 in file LCD.s
+   Uses
+      At line 430 in file LCD.s
+      At line 431 in file LCD.s
+      At line 432 in file LCD.s
+      At line 433 in file LCD.s
+      At line 434 in file LCD.s
+
+wait5ms 00000274
+
+Symbol: wait5ms
+   Definitions
+      At line 428 in file LCD.s
+   Uses
+      At line 133 in file LCD.s
+      At line 134 in file LCD.s
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 135 in file LCD.s
+      At line 136 in file LCD.s
+      At line 166 in file LCD.s
+      At line 221 in file LCD.s
+      At line 224 in file LCD.s
+
+wait6us 0000024C
+
+Symbol: wait6us
+   Definitions
+      At line 401 in file LCD.s
+   Uses
+      At line 65 in file LCD.s
+      At line 69 in file LCD.s
+      At line 72 in file LCD.s
+      At line 113 in file LCD.s
+      At line 162 in file LCD.s
+      At line 201 in file LCD.s
+      At line 415 in file LCD.s
+
+wait6us_loop 00000252
+
+Symbol: wait6us_loop
+   Definitions
+      At line 404 in file LCD.s
+   Uses
+      At line 406 in file LCD.s
+Comment: wait6us_loop used once
+wait90us 00000258
+
+Symbol: wait90us
+   Definitions
+      At line 409 in file LCD.s
+   Uses
+      At line 121 in file LCD.s
+      At line 207 in file LCD.s
+
+wait90us_loop 0000025E
+
+Symbol: wait90us_loop
+   Definitions
+      At line 414 in file LCD.s
+   Uses
+      At line 417 in file LCD.s
+Comment: wait90us_loop used once
+29 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GPIO_PORTF_AFSEL_R 40025420
+
+Symbol: GPIO_PORTF_AFSEL_R
+   Definitions
+      At line 43 in file LCD.s
+   Uses
+      At line 146 in file LCD.s
+Comment: GPIO_PORTF_AFSEL_R used once
+GPIO_PORTF_DEN_R 4002551C
+
+Symbol: GPIO_PORTF_DEN_R
+   Definitions
+      At line 44 in file LCD.s
+   Uses
+      At line 154 in file LCD.s
+Comment: GPIO_PORTF_DEN_R used once
+GPIO_PORTF_DIR_R 40025400
+
+Symbol: GPIO_PORTF_DIR_R
+   Definitions
+      At line 42 in file LCD.s
+   Uses
+      At line 150 in file LCD.s
+Comment: GPIO_PORTF_DIR_R used once
+LCD_DATA_NIBBLE_R 4002503C
+
+Symbol: LCD_DATA_NIBBLE_R
+   Definitions
+      At line 39 in file LCD.s
+   Uses
+      At line 63 in file LCD.s
+Comment: LCD_DATA_NIBBLE_R used once
+LCD_LATCH 40025080
+
+Symbol: LCD_LATCH
+   Definitions
+      At line 40 in file LCD.s
+   Uses
+      At line 66 in file LCD.s
+Comment: LCD_LATCH used once
+LCD_RS 40025040
+
+Symbol: LCD_RS
+   Definitions
+      At line 41 in file LCD.s
+   Uses
+      At line 111 in file LCD.s
+      At line 160 in file LCD.s
+      At line 199 in file LCD.s
+
+SYSCTL_RCGC2_GPIOF 00000020
+
+Symbol: SYSCTL_RCGC2_GPIOF
+   Definitions
+      At line 37 in file LCD.s
+   Uses
+      At line 140 in file LCD.s
+Comment: SYSCTL_RCGC2_GPIOF used once
+SYSCTL_RCGC2_R 400FE108
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+
+Symbol: SYSCTL_RCGC2_R
+   Definitions
+      At line 36 in file LCD.s
+   Uses
+      At line 138 in file LCD.s
+Comment: SYSCTL_RCGC2_R used once
+8 symbols
+370 symbols in table

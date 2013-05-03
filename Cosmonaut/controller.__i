@@ -1,0 +1,5 @@
+-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I.. -I..\..\.. -I..\inc -I..\driverlib\rvmdk -I..\driverlib 
+-I C:\Keil\ARM\RV31\INC 
+-I C:\Keil\ARM\CMSIS\Include 
+-I C:\Keil\ARM\Inc\Luminary 
+-o "controller.o" --omf_browse "controller.crf" --depend "controller.d" "controller.c"
